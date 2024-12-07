@@ -18,8 +18,22 @@ let ``Initial Test``() =
     punchIt input
     |> Assert.EqualTo 11
 
+[<Fact>]
+let ``Second Phase Test``() =
+    punchIt2 input
+    |> Assert.EqualTo 31
     
-    
+[<Fact>]
+let ``Second Test``() =
+    System.IO.File.ReadAllText("DayOne.txt")
+    |> punchIt 
+    |> Assert.EqualTo 2086478
+
+[<Fact>]
+let ``Second Phase Test 2``() =
+    System.IO.File.ReadAllText("DayOne.txt")
+    |> punchIt2
+    |> Assert.FailWith "%i"
     
 
 
