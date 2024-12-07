@@ -33,7 +33,7 @@ let ``Second Test``() =
 let ``Second Phase Test 2``() =
     System.IO.File.ReadAllText("DayOne.txt")
     |> punchIt2
-    |> Assert.FailWith "%i"
+    |> Assert.EqualTo 24941624
     
 
 
