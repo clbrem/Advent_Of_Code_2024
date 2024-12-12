@@ -10,6 +10,9 @@
         <Compile Include="Assert.fs" />
         <Compile Include="DayOne.Test.fs" />
         <Compile Include="DayTwo.Test.fs" />
+        <Compile Include="DayThree.Test.fs" />
+        <Compile Include="DayFour.Test.fs" />
+        <Compile Include="DayFive.Test.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
@@ -26,7 +29,7 @@
     <ItemGroup>
         <Content Include="Samples/**">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <Link>Samples/%(RecursiveDir)%(Filename)%(Extension)</Link>
         </Content>
     </ItemGroup>
 

@@ -25,13 +25,13 @@ let ``Second Phase Test``() =
     
 [<Fact>]
 let ``Second Test``() =
-    System.IO.File.ReadAllText("DayOne.txt")
+    System.IO.File.ReadAllText("Samples/DayOne.txt")
     |> punchIt 
     |> Assert.EqualTo 2086478
 
 [<Fact>]
 let ``Second Phase Test 2``() =
-    System.IO.File.ReadAllText("DayOne.txt")
+    System.IO.File.ReadAllText("Samples/DayOne.txt")
     |> punchIt2
     |> Assert.EqualTo 24941624
     
