@@ -4,7 +4,7 @@ module String =
     
     let isEmpty (s: string) = System.String.IsNullOrWhiteSpace s 
     let split (splitBy: string) (s: string) =
-        s.Split(splitBy)
+        s.Split(splitBy)        
         |> Array.toList
         |> List.filter (isEmpty >> not)
     
