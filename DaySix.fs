@@ -69,6 +69,40 @@ let rec private visit grid (guard: Guard) visited  =
         Set.add guard.coord visited
         |> visit grid { guard with coord = (i,j) }
     
-        
 let traverse grid guard =
-    visit grid  guard Set.empty
+    visit grid guard Set.empty
+
+    
+let iterate  grid (acc, guards) =
+     let folder ( acc, guards ) guard visited =
+        if Set.contains guard visited then
+            ( Set.add (peek grid guard).Value acc , guards )
+        else
+            match peek grid guard with
+            | None -> (acc, guards)
+            | Some (Barrier grid) ->
+                (acc, Map.add (turn guard)  (Set.add guard visited) guards)
+            | Some (i,j) ->
+                (acc, Map.add {guard with coord=(i,j)} (Set.add guard visited) guards)
+     Map.fold folder (acc, Map.empty) guards
+let rec finish grid =
+    function
+    | acc, map when Map.isEmpty map -> acc
+    | other -> iterate grid other |> finish grid
+
+let spawn guard =
+    Map.add (turn guard) ( Set.singleton guard )
+let rec private loop  grid (acc: Set<int*int>, guards: Map<Guard, Set<Guard>>) guard =
+    match peek grid guard with    
+    | None -> (acc, guards)
+    | Some (Barrier grid) ->
+        loop  grid (acc, guards) (turn guard)    
+    | Some (i,j) ->
+        let acc, guards = iterate grid (acc, guards)
+        loop  grid (acc, guards |>spawn guard ) {guard with coord= (i,j)}
+
+let solve grid guard =
+    loop grid (Set.singleton guard.coord, Map.empty) guard
+    |> finish grid
+    |> Set.count
+    
