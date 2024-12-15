@@ -41,19 +41,42 @@ let ``Can Solve Actual`` () =
         |> List.map Equation.ofString
         |> List.filter Equation.canSolve
         |> List.sumBy Equation.testValue
-        |> Assert.FailWith "%i"
+        |> Assert.EqualTo 4122618559853L
     
     
     
 [<Theory>]
-[<InlineData(298L, 3L)>]
-[<InlineData(100024L, 6L)>]
-[<InlineData(1000000000000000001L, 19L)>]
-[<InlineData(9000000001200004560L, 19L)>]
-
-let ``digits``(input: int64, n: int64) =
-    let rec loop acc input =
-        if input  = 0L then acc 
-        else loop (acc + 1L) (input / 10L)
-    loop 0 input |> Assert.EqualTo n
+[<InlineData(298L, 3L, 1000L)>]
+[<InlineData(100024L, 6L, 1000000L)>]
+[<InlineData(100000000000000001L, 18L,1000000000000000000L )>]
+[<InlineData(900000000120000456L, 18L, 1000000000000000000L)>]
+let ``digits``(input: int64, n: int64, modulus: int64) =
+    Int64.digits input |> Assert.EqualTo n
+    Int64.modulus input |> Assert.EqualTo modulus
+//     
+// [<Fact>]
+// let ``WTF`` ()=
     
+    
+[<Theory>]
+[<InlineData("190:10 19", true)>]
+[<InlineData("3267:81 40 27", true)>]
+[<InlineData("83:17 5", false)>]
+[<InlineData("156: 15 6", true)>]
+[<InlineData("7290: 6 8 6 15", true)>]
+[<InlineData("161011: 16 10 13", false)>]
+[<InlineData("192: 17 8 14", true)>]
+[<InlineData("21037: 9 7 18 13", false)>]
+[<InlineData("292: 11 6 16 20", true)>]
+let ``Can Solve With Concat``(eqn, expected) =
+    Equation.ofString eqn     
+    |> Equation.canSolveWithConcat
+    |> Assert.EqualTo expected
+[<Fact>]    
+let ``Can Solve Actual With Concat`` () =    
+        File.ReadAllText "Samples/DaySeven.txt"
+        |> String.lines    
+        |> List.map Equation.ofString
+        |> List.filter Equation.canSolveWithConcat
+        |> List.sumBy Equation.testValue
+        |> Assert.FailWith "%i"
