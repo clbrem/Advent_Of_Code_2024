@@ -11,4 +11,11 @@ module Array2D =
         if i+1 < grid.GetLength 0 then Some (i+1,j)
         elif j+1 < grid.GetLength 1 then Some (0,j+1)
         else None
+    let fold f state (grid: 'T array2d)=
+        let rec loop state (i,j) =
+            let state' = f state (i,j) grid[i,j]                        
+            match tryNext (i,j) grid with
+            | Some ij -> loop state' ij
+            | None -> state'
+        loop state (0,0)
         

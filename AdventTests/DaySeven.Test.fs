@@ -79,4 +79,4 @@ let ``Can Solve Actual With Concat`` () =
         |> List.map Equation.ofString
         |> List.filter Equation.canSolveWithConcat
         |> List.sumBy Equation.testValue
-        |> Assert.FailWith "%i"
+        |> Assert.EqualTo 227615740238334L
