@@ -9,8 +9,9 @@ let sample = "2333133121414131402"
 let ``Parse?``() =
     File.ReadAllText "Samples/DayNine.txt"
     |> Block.ofString
+    |> fst
     |> List.length
-    |> Assert.FailWith "%i"
+    |> Assert.EqualTo 20000
 
 [<Fact>]
 let ``Can Calculate Checksum``() =
@@ -22,3 +23,20 @@ let ``Can Calculate Checksum``() =
     |> List.map Block.File
     |> List.sumBy Block.checksum
     |> Assert.EqualTo (18L+27L+32L)
+[<Fact>]
+let ``test Part A``() =
+    sample |> Block.ofString
+    |> Memory.partA
+    |> Assert.EqualTo 1928L
+    
+[<Fact>]
+let ``Part A``() =
+    File.ReadAllText "Samples/DayNine.txt"
+    |> Block.ofString
+    |> Memory.partA
+    |> Assert.EqualTo 6463499258318L
+[<Fact>]
+let ``test Part B ``() =
+    sample |> Block.ofString
+    |> Memory.partB
+    |> Assert.EqualTo 2858L
