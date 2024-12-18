@@ -88,9 +88,9 @@ module Memory =
         let n = Block.length (Free free)
         function
         | [] -> None
-        | Free _ :: rest -> scan id  free acc rest
+        | Free _ :: rest -> scan id  free acc rest 
         | File a :: _ when a.id <= id -> None
-        | File a :: rest when Block.length (File a) <= n -> Some (acc + File.checksum a, a, rest) 
+        | File a :: rest when Block.length (File a) <= n -> Some (acc , a, rest) 
         | File a :: rest ->  scan id free (acc + (File.checksum a)) rest
 
     let rec private loopB (id: int) (acc: int64) memory: int64 =
@@ -103,8 +103,9 @@ module Memory =
         | Free a :: left,  right ->
             match scan id a 0L right with
             | Some (acc', b, rest) ->
+                let last = {b with start = a.start; stop = a.start + Block.length (File b)} |> File.checksum
                 let fr = Free {a with start = a.start + Block.length (File b)}
-                loopB id (acc + acc') (fr:: left, rest)
+                loopB id (acc + acc' + last) (fr:: left, rest)
             | None -> loopB id acc (left, right)                    
         | _,_ -> acc
     let partA  = loop combobulate 0L
