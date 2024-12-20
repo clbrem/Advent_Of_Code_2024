@@ -50,17 +50,25 @@ module TopoMap =
         let found =peakLoop map Map.empty trailHeads
         trailHeads
         |> List.sumBy (fun m -> Map.find m found |> Set.count)
-        
-        
-        
-                
-            
-
-            
-    
-        
-            
-
-        
-
-
+    let rec ratingLoop  (map:TopoMap) (acc: Map<int*int, int>)   =
+        function
+        | (i,j) :: rest ->
+            if map.[i,j] = 9 then Map.add (i,j) (1) acc |> ratingLoop map <| rest
+            else
+                let nbs = neighbors map (i,j) 
+                let unresolved = nbs |> List.filter (fun n -> not (Map.containsKey n acc))
+                if unresolved |> List.isEmpty then
+                    nbs
+                    |> List.map (fun n -> Map.find n acc)
+                    |> List.sum
+                    |> Map.add (i,j)
+                    <| acc
+                    |> ratingLoop map
+                    <| rest
+                else ratingLoop map acc <| unresolved @ (i,j) :: rest
+        | _ -> acc
+    let ratings map =
+        let trailHeads = trailHeads map        
+        let found =ratingLoop map Map.empty trailHeads
+        trailHeads
+        |> List.sumBy (fun m -> Map.find m found )

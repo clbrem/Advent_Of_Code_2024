@@ -18,6 +18,7 @@
         <Compile Include="DayEight.Test.fs" />
         <Compile Include="DayNine.Test.fs" />
         <Compile Include="DayTen.Test.fs" />
+        <Compile Include="DayEleven.Test.fs" />
         <Compile Include="Program.fs"/>
     </ItemGroup>
 
