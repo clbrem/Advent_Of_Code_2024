@@ -35,3 +35,28 @@ let rec evaluateMany n =
     if n = 0 then id else
     evaluate >> evaluateMany (n-1)
 
+let rec countLoop (cache: Map<int * int64, int64>)  =
+    function
+    | [] -> cache
+    | (0, num) :: rest -> countLoop (Map.add (0, num) 1 cache) rest
+    | (ct, num) :: rest -> 
+        match Map.tryFind (ct, num) cache with
+        | Some n -> countLoop  cache rest
+        | None ->
+            let items = evaluateSingle num |> List.map (fun t -> (ct-1, t))            
+            let notFound = items |> List.filter (fun i -> not (Map.containsKey i cache))
+            if List.isEmpty notFound then
+               countLoop
+                   (
+                       Map.add
+                           (ct,num)
+                           (items |> List.sumBy (fun k -> (Map.find k cache)))
+                           cache)
+                   rest
+            else
+                countLoop cache (notFound @ (ct,num) :: rest)
+let count n input =
+    // This is too low 🤕
+    let loopInput = input |> List.map (fun i -> (n,i))
+    let found = countLoop Map.empty loopInput
+    loopInput |> List.sumBy (fun i -> Map.find i found )

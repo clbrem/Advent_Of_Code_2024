@@ -34,8 +34,35 @@ let ``Evaluate More``() =
     |> evaluateMany 25
     |> List.length |> Assert.EqualTo 55312
     
-[<Fact>]
+
 let ``Evaluate Input``() =
     puzzleInput |> String.split " " |> List.map String.toInt64
     |> evaluateMany 25
     |> List.length |> Assert.EqualTo 55312    
+
+[<Fact>]
+let ``Count Digits``() =
+    count 0 [99] |> Assert.EqualTo 1    
+    count 1 [99] |> Assert.EqualTo 2
+    count 1 [100L] |> Assert.EqualTo 1
+    count 1 [1000L] |> Assert.EqualTo 2
+    count 1 [2024L] |> Assert.EqualTo 2
+
+    
+[<Fact>]
+let ``Count Some``() =
+    firstExample |> String.split " " |> List.map String.toInt64
+    |> count 1    
+    |> Assert.EqualTo 7
+[<Fact>]
+let ``Count More``() =
+    puzzleInput |> String.split " " |> List.map String.toInt64
+    |> count 25
+    |> Assert.EqualTo 55312
+    
+[<Fact>]
+let ``Count Input``() =
+    secondExample |> String.split " " |> List.map String.toInt64
+    |> count 75
+    |> Assert.EqualTo 55312    
+        
